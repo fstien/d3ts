@@ -5,10 +5,12 @@
         "sourceMap": true,
         "declaration": true,
         "module": "ES6",
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "outDir": "js"
     },
     "exclude": [
         "node_modules",
-        "dist"
+        "dist",
+        "js"
     ]
 }

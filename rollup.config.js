@@ -1,9 +1,9 @@
 import resolve from 'rollup-plugin-node-resolve';
  
 export default {
-    input: 'src/app.js',
+    input: 'js/app.js',
     output: {
-        file: 'src/bundle.js',
+        file: 'dist/bundle.js',
         format: 'umd'
     },
     plugins: [
