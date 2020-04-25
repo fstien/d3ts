@@ -59,6 +59,8 @@ export default class Scale {
     setXMax(xMax: number, duration: number) {
         this.xMax = xMax;
 
+        
+
         this.xScale.domain([this.xMin, this.xMax])
 
         this.gX.attr("transform", "translate(0," + (this.graph.height - this.graph.padding) + ")")
