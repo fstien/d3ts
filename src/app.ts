@@ -1,8 +1,8 @@
 
 import GraphSVG from './GraphSVG';
-import Scale from './Scale';
+import {Scale} from './Scale';
 import Std_norm from './Stats';
-import Serie from './Serie';
+import {Serie} from './Serie';
 import Plot from './Plot';
 
 const svg = new GraphSVG(400, 600, 30);

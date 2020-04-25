@@ -1,6 +1,9 @@
 import GraphSVG from './GraphSVG';
 import { ScaleLinear } from 'd3';
-export default class Scale {
+interface ScaleObserver {
+    update(event: string): void;
+}
+declare class Scale {
     xMin: number;
     xMax: number;
     xTicks: number;
@@ -14,7 +17,9 @@ export default class Scale {
     yAxis: any;
     gX: any;
     gY: any;
+    observers: Array<ScaleObserver>;
     constructor(xMin: number, xMax: number, xTicks: number, yMin: number, yMax: number, yTicks: number, graph: GraphSVG);
     plotAxis(): void;
     setXMax(xMax: number, duration: number): void;
 }
+export { ScaleObserver, Scale };

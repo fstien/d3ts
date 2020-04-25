@@ -1,11 +1,11 @@
 
 import * as d3 from 'd3';
-import Scale from "./Scale";
-import Serie from "./Serie";
+import {Scale, ScaleObserver} from "./Scale";
+import {Serie, Value} from "./Serie";
 import GraphSVG from './GraphSVG';
 
 
-export default class Plot { 
+export default class Plot implements ScaleObserver { 
     id: string;
 
     graphSvg: GraphSVG;
@@ -21,12 +21,18 @@ export default class Plot {
         this.scale = scale;
         this.serie = serie;
         
+        this.drawAll();
+
+        this.scale.observers.push(this)
+    }
+
+    drawAll() {
         this.line = d3
             .line()
-            .x(function(v) { return scale.xScale(v.x); })
-            .y(function(v) { return scale.yScale(v.y); });
+            .x(function(v: Value) { return this.scale.xScale(v.x); }.bind(this))
+            .y(function(v: Value) { return this.scale.yScale(v.y); }.bind(this));
 
-        this.svgRef = graphSvg.svg
+        this.svgRef = this.graphSvg.svg
             .selectAll("path.line#" + this.id)
             .data([this.serie.values.slice(0, 5)])
             .enter()
@@ -38,7 +44,23 @@ export default class Plot {
             .attr("stroke", "black");
     }
 
-    drawAll() {
+    update(event: string): void {
+        console.log(event);
+        this.updateGraph();
+    }
 
+    updateGraph() {
+        this.line = d3
+            .line()
+            .x(function(v: Value) { return this.scale.xScale(v.x); }.bind(this))
+            .y(function(v: Value) { return this.scale.yScale(v.y); }.bind(this));
+
+
+        this.graphSvg.svg
+            .selectAll("path.line#" + this.id)
+            .data([this.serie.values.slice(0,5)])
+            .attr("d", this.line)
+            .attr("class", "line")
+            .attr("stroke", "black");
     }
 }

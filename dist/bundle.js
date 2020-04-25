@@ -3786,6 +3786,7 @@
 
   class Scale {
       constructor(xMin, xMax, xTicks, yMin, yMax, yTicks, graph) {
+          this.observers = [];
           this.xMin = xMin;
           this.xMax = xMax;
           this.xTicks = xTicks;
@@ -3812,6 +3813,9 @@
       }
       setXMax(xMax, duration) {
           this.xMax = xMax;
+          setTimeout(function () {
+              this.observers[0].update("hello world");
+          }.bind(this), duration);
           this.xScale.domain([this.xMin, this.xMax]);
           this.gX.attr("transform", "translate(0," + (this.graph.height - this.graph.padding) + ")")
               .transition()
@@ -3850,10 +3854,14 @@
           this.graphSvg = graphSvg;
           this.scale = scale;
           this.serie = serie;
+          this.drawAll();
+          this.scale.observers.push(this);
+      }
+      drawAll() {
           this.line = line()
-              .x(function (v) { return scale.xScale(v.x); })
-              .y(function (v) { return scale.yScale(v.y); });
-          this.svgRef = graphSvg.svg
+              .x(function (v) { return this.scale.xScale(v.x); }.bind(this))
+              .y(function (v) { return this.scale.yScale(v.y); }.bind(this));
+          this.svgRef = this.graphSvg.svg
               .selectAll("path.line#" + this.id)
               .data([this.serie.values.slice(0, 5)])
               .enter()
@@ -3864,7 +3872,20 @@
               .attr("fill", "none")
               .attr("stroke", "black");
       }
-      drawAll() {
+      update(event) {
+          console.log(event);
+          this.updateGraph();
+      }
+      updateGraph() {
+          this.line = line()
+              .x(function (v) { return this.scale.xScale(v.x); }.bind(this))
+              .y(function (v) { return this.scale.yScale(v.y); }.bind(this));
+          this.graphSvg.svg
+              .selectAll("path.line#" + this.id)
+              .data([this.serie.values.slice(0, 5)])
+              .attr("d", this.line)
+              .attr("class", "line")
+              .attr("stroke", "black");
       }
   }
 

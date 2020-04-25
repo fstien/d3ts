@@ -5,11 +5,15 @@ export default class Plot {
         this.graphSvg = graphSvg;
         this.scale = scale;
         this.serie = serie;
+        this.drawAll();
+        this.scale.observers.push(this);
+    }
+    drawAll() {
         this.line = d3
             .line()
-            .x(function (v) { return scale.xScale(v.x); })
-            .y(function (v) { return scale.yScale(v.y); });
-        this.svgRef = graphSvg.svg
+            .x(function (v) { return this.scale.xScale(v.x); }.bind(this))
+            .y(function (v) { return this.scale.yScale(v.y); }.bind(this));
+        this.svgRef = this.graphSvg.svg
             .selectAll("path.line#" + this.id)
             .data([this.serie.values.slice(0, 5)])
             .enter()
@@ -20,7 +24,21 @@ export default class Plot {
             .attr("fill", "none")
             .attr("stroke", "black");
     }
-    drawAll() {
+    update(event) {
+        console.log(event);
+        this.updateGraph();
+    }
+    updateGraph() {
+        this.line = d3
+            .line()
+            .x(function (v) { return this.scale.xScale(v.x); }.bind(this))
+            .y(function (v) { return this.scale.yScale(v.y); }.bind(this));
+        this.graphSvg.svg
+            .selectAll("path.line#" + this.id)
+            .data([this.serie.values.slice(0, 5)])
+            .attr("d", this.line)
+            .attr("class", "line")
+            .attr("stroke", "black");
     }
 }
 //# sourceMappingURL=Plot.js.map

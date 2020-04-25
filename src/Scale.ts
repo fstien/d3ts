@@ -2,7 +2,11 @@ import * as d3 from 'd3';
 import GraphSVG from './GraphSVG';
 import { ScaleLinear } from 'd3';
 
-export default class Scale {
+interface ScaleObserver {
+    update(event: string): void
+}
+
+class Scale {
     xMin: number;
     xMax: number;
     xTicks: number;
@@ -22,6 +26,8 @@ export default class Scale {
     gX: any;
     gY: any;
     
+    observers: Array<ScaleObserver> = [];
+
     constructor(xMin: number, xMax: number, xTicks: number,
             yMin: number, yMax: number, yTicks: number,
             graph: GraphSVG) {
@@ -59,7 +65,9 @@ export default class Scale {
     setXMax(xMax: number, duration: number) {
         this.xMax = xMax;
 
-        
+        setTimeout(function() {
+            this.observers[0].update("hello world");
+        }.bind(this), duration)
 
         this.xScale.domain([this.xMin, this.xMax])
 
@@ -69,4 +77,9 @@ export default class Scale {
             .duration(duration)
             .call(this.xAxis);    
     }
+}
+
+export {
+    ScaleObserver, 
+    Scale
 }

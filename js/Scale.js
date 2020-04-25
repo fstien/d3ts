@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
-export default class Scale {
+class Scale {
     constructor(xMin, xMax, xTicks, yMin, yMax, yTicks, graph) {
+        this.observers = [];
         this.xMin = xMin;
         this.xMax = xMax;
         this.xTicks = xTicks;
@@ -27,6 +28,9 @@ export default class Scale {
     }
     setXMax(xMax, duration) {
         this.xMax = xMax;
+        setTimeout(function () {
+            this.observers[0].update("hello world");
+        }.bind(this), duration);
         this.xScale.domain([this.xMin, this.xMax]);
         this.gX.attr("transform", "translate(0," + (this.graph.height - this.graph.padding) + ")")
             .transition()
@@ -35,4 +39,5 @@ export default class Scale {
             .call(this.xAxis);
     }
 }
+export { Scale };
 //# sourceMappingURL=Scale.js.map

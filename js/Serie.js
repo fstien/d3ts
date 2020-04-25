@@ -1,4 +1,4 @@
-export default class Serie {
+class Serie {
     constructor(y0, func, n) {
         this.values = [];
         this.id = (Math.floor(Math.random() * 1000000) + 1);
@@ -12,4 +12,5 @@ export default class Serie {
         ;
     }
 }
+export { Serie };
 //# sourceMappingURL=Serie.js.map

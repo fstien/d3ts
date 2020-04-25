@@ -2,9 +2,9 @@ interface Value {
     x: number;
     y: number;
 }
-export default class Serie {
+declare class Serie {
     id: number;
     values: Array<Value>;
     constructor(y0: number, func: Function, n: number);
 }
-export {};
+export { Value, Serie };
