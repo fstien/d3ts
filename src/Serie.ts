@@ -4,7 +4,7 @@ interface Value {
     y: number;   
 }
 
-export default class Serie { 
+class Serie { 
     id: number;
     values: Array<Value> = [];
 
@@ -21,4 +21,9 @@ export default class Serie {
         };
     }
 
+}
+
+export {
+    Value, 
+    Serie
 }

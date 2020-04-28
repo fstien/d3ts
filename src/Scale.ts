@@ -1,8 +1,14 @@
 import * as d3 from 'd3';
 import GraphSVG from './GraphSVG';
 import { ScaleLinear } from 'd3';
+import defaultConfig from './TransitionConfig';
 
-export default class Scale {
+
+interface ScaleObserver {
+    transitionScale(): void
+}
+
+class Scale {
     xMin: number;
     xMax: number;
     xTicks: number;
@@ -21,6 +27,8 @@ export default class Scale {
 
     gX: any;
     gY: any;
+
+    observersPlots: Array<ScaleObserver> = [];
     
     constructor(xMin: number, xMax: number, xTicks: number,
             yMin: number, yMax: number, yTicks: number,
@@ -56,17 +64,28 @@ export default class Scale {
             .call(this.yAxis);
     }
 
-    setXMax(xMax: number, duration: number) {
+    setXMax(xMax: number) {
         this.xMax = xMax;
-
-        
 
         this.xScale.domain([this.xMin, this.xMax])
 
         this.gX.attr("transform", "translate(0," + (this.graph.height - this.graph.padding) + ")")
             .transition()
-            .ease(d3.easeSin)
-            .duration(duration)
+            .ease(defaultConfig.ease)
+            .duration(defaultConfig.duration)
             .call(this.xAxis);    
+
+        this.updateObservers()
     }
+
+    updateObservers() {
+        this.observersPlots.forEach(function(plot) {
+            plot.transitionScale()
+        })
+    }
+}
+
+export {
+    ScaleObserver, 
+    Scale
 }
