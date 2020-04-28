@@ -19,7 +19,6 @@ export default class Plot implements ScaleObserver {
     stop: number = 1;
 
     line: any;
-    circles: any;
 
     constructor(graphSvg: GraphSVG, scale: Scale, serie: Serie, withCircles: Boolean = false) {
         this.id = "id" + serie.id;
@@ -48,13 +47,11 @@ export default class Plot implements ScaleObserver {
             .attr("stroke", "black");
         
         if (this.withCircles) {
-            this.circles = this.graphSvg.svg
+            this.graphSvg.svg
                 .append("g")
                 .attr("id", this.id)
                 .selectAll("circle")
-                .data(this.serie.values.slice(this.start, this.stop - 1));
-            
-            this.circles
+                .data(this.serie.values.slice(this.start, this.stop - 1))
                 .enter()
                 .append("circle")
                 .attr("cx", function(v: Value) {
@@ -94,7 +91,9 @@ export default class Plot implements ScaleObserver {
             .attr("d", this.line);
 
         if (this.withCircles) {
-            this.circles
+            this.graphSvg.svg
+                .select("g#" + this.id)
+                .selectAll("circle") 
                 .data(this.serie.values.slice(this.start, this.stop))
                 .enter()
                 .append("circle")
@@ -105,8 +104,7 @@ export default class Plot implements ScaleObserver {
                     return this.scale.yScale(v.y);
                 }.bind(this)) 
                 .attr("r", 2)
-                .attr("color", "black")
-                .merge(this.circles); 
+                .attr("color", "black"); 
         }
     }
 
