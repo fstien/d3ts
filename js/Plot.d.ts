@@ -1,13 +1,21 @@
-import Scale from "./Scale";
-import Serie from "./Serie";
+import { Scale, ScaleObserver } from "./Scale";
+import { Serie } from "./Serie";
 import GraphSVG from './GraphSVG';
-export default class Plot {
+export default class Plot implements ScaleObserver {
     id: string;
     graphSvg: GraphSVG;
     scale: Scale;
     serie: Serie;
+    withCircles: Boolean;
+    count: number;
+    start: number;
+    stop: number;
     line: any;
-    svgRef: any;
-    constructor(graphSvg: GraphSVG, scale: Scale, serie: Serie);
-    drawAll(): void;
+    circles: any;
+    constructor(graphSvg: GraphSVG, scale: Scale, serie: Serie, withCircles?: Boolean);
+    showAll(): void;
+    showAllSequential(duration: number): void;
+    showOneMore(): void;
+    render(): void;
+    transitionScale(): void;
 }

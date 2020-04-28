@@ -1,6 +1,8 @@
 import * as d3 from 'd3';
-export default class Scale {
+import defaultConfig from './TransitionConfig';
+class Scale {
     constructor(xMin, xMax, xTicks, yMin, yMax, yTicks, graph) {
+        this.observersPlots = [];
         this.xMin = xMin;
         this.xMax = xMax;
         this.xTicks = xTicks;
@@ -25,14 +27,21 @@ export default class Scale {
             .attr("transform", "translate(" + this.graph.padding + ",0)")
             .call(this.yAxis);
     }
-    setXMax(xMax, duration) {
+    setXMax(xMax) {
         this.xMax = xMax;
         this.xScale.domain([this.xMin, this.xMax]);
         this.gX.attr("transform", "translate(0," + (this.graph.height - this.graph.padding) + ")")
             .transition()
-            .ease(d3.easeSin)
-            .duration(duration)
+            .ease(defaultConfig.ease)
+            .duration(defaultConfig.duration)
             .call(this.xAxis);
+        this.updateObservers();
+    }
+    updateObservers() {
+        this.observersPlots.forEach(function (plot) {
+            plot.transitionScale();
+        });
     }
 }
+export { Scale };
 //# sourceMappingURL=Scale.js.map
