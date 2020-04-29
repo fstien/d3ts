@@ -2828,6 +2828,12 @@
     return ((t *= 2) <= 1 ? t * t * t : (t -= 2) * t * t + 2) / 2;
   }
 
+  var pi = Math.PI;
+
+  function sinInOut(t) {
+    return (1 - Math.cos(pi * t)) / 2;
+  }
+
   var defaultTiming = {
     time: null, // Set on use.
     delay: 0,
@@ -2869,8 +2875,8 @@
   selection.prototype.interrupt = selection_interrupt;
   selection.prototype.transition = selection_transition;
 
-  var pi = Math.PI,
-      tau = 2 * pi,
+  var pi$1 = Math.PI,
+      tau = 2 * pi$1,
       epsilon$1 = 1e-6,
       tauEpsilon = tau - epsilon$1;
 
@@ -2940,7 +2946,7 @@
             l20_2 = x20 * x20 + y20 * y20,
             l21 = Math.sqrt(l21_2),
             l01 = Math.sqrt(l01_2),
-            l = r * Math.tan((pi - Math.acos((l21_2 + l01_2 - l20_2) / (2 * l21 * l01))) / 2),
+            l = r * Math.tan((pi$1 - Math.acos((l21_2 + l01_2 - l20_2) / (2 * l21 * l01))) / 2),
             t01 = l / l01,
             t21 = l / l21;
 
@@ -2987,7 +2993,7 @@
 
       // Is this arc non-empty? Draw an arc!
       else if (da > epsilon$1) {
-        this._ += "A" + r + "," + r + ",0," + (+(da >= pi)) + "," + cw + "," + (this._x1 = x + r * Math.cos(a1)) + "," + (this._y1 = y + r * Math.sin(a1));
+        this._ += "A" + r + "," + r + ",0," + (+(da >= pi$1)) + "," + cw + "," + (this._x1 = x + r * Math.cos(a1)) + "," + (this._y1 = y + r * Math.sin(a1));
       }
     },
     rect: function(x, y, w, h) {
@@ -3779,13 +3785,13 @@
   }
 
   const transitionConfig = {
-      duration: 1000,
-      ease: cubicInOut
+      duration: 2000,
+      ease: sinInOut
   };
 
   class Scale {
       constructor(xMin, xMax, xTicks, yMin, yMax, yTicks, graph) {
-          this.observers = [];
+          this.observersPlots = [];
           this.xMin = xMin;
           this.xMax = xMax;
           this.xTicks = xTicks;
@@ -3821,8 +3827,8 @@
           this.updateObservers();
       }
       updateObservers() {
-          this.observers.forEach(function (plot) {
-              plot.transition();
+          this.observersPlots.forEach(function (plot) {
+              plot.transitionScale();
           });
       }
   }
@@ -3860,7 +3866,7 @@
           this.serie = serie;
           this.count = this.serie.values.length;
           this.withCircles = withCircles;
-          this.scale.observers.push(this);
+          this.scale.observersPlots.push(this);
           this.line = line()
               .x(function (v) { return scale.xScale(v.x); }.bind(this))
               .y(function (v) { return scale.yScale(v.y); }.bind(this));
@@ -3930,7 +3936,7 @@
                   .attr("color", "black");
           }
       }
-      transition() {
+      transitionScale() {
           this.graphSvg.svg
               .selectAll("path.line#" + this.id)
               .transition()
@@ -3954,103 +3960,11 @@
       }
   }
 
-  class Line {
-      constructor(x1, y1, x2, y2, svg, scale) {
-          this.scale = scale;
-          this.svg = svg;
-          this.id = "id" + (Math.floor(Math.random() * 1000000) + 1);
-          this.x1 = x1;
-          this.y1 = y1;
-          this.x2 = x2;
-          this.y2 = y2;
-          this.scaledX1 = this.scale.xScale(this.x1);
-          this.scaledY1 = this.scale.yScale(this.y1);
-          this.scaledX2 = this.scale.xScale(this.x2);
-          this.scaledY2 = this.scale.yScale(this.y2);
-          this.scale.observers.push(this);
-      }
-      render() {
-          this.svg.svg.append("line")
-              .attr("x1", this.scaledX1)
-              .attr("y1", this.scaledY1)
-              .attr("x2", this.scaledX2)
-              .attr("y2", this.scaledY2)
-              .attr("id", this.id)
-              .attr("visibility", "visible")
-              .attr("stroke", "black");
-      }
-      transition() {
-          this.scaledX1 = this.scale.xScale(this.x1);
-          this.scaledY1 = this.scale.yScale(this.y1);
-          this.scaledX2 = this.scale.xScale(this.x2);
-          this.scaledY2 = this.scale.yScale(this.y2);
-          this.svg.svg
-              .selectAll("line#" + this.id)
-              .attr("visibility", "visible")
-              .transition()
-              .ease(transitionConfig.ease)
-              .duration(transitionConfig.duration)
-              .attr("x1", this.scaledX1)
-              .attr("y1", this.scaledY1)
-              .attr("x2", this.scaledX2)
-              .attr("y2", this.scaledY2);
-      }
-      hide() {
-          this.svg.svg
-              .selectAll("line#" + this.id)
-              .attr("visibility", "hidden");
-      }
-      transitionTo(x1, y1, x2, y2) {
-          this.x1 = x1;
-          this.y1 = y1;
-          this.x2 = x2;
-          this.y2 = y2;
-          this.transition();
-      }
-  }
-
-  class Point {
-      constructor(x, y, svg, scale) {
-          this.scale = scale;
-          this.svg = svg;
-          this.id = "id" + (Math.floor(Math.random() * 1000000) + 1);
-          this.x = x;
-          this.y = y;
-          this.scaledX = this.scale.xScale(this.x);
-          this.scaledY = this.scale.yScale(this.y);
-          this.svg.svg
-              .append("circle")
-              .attr("id", this.id)
-              .attr("cx", this.scaledX)
-              .attr("cy", this.scaledY)
-              .attr("r", 2)
-              .attr("color", "black");
-          this.scale.observers.push(this);
-      }
-      transition() {
-          console.log("transition");
-          this.scaledX = this.scale.xScale(this.x);
-          this.scaledY = this.scale.yScale(this.y);
-          this.svg.svg
-              .select("circle#" + this.id)
-              .transition()
-              .ease(transitionConfig.ease)
-              .duration(transitionConfig.duration)
-              .attr("cx", this.scaledX)
-              .attr("cy", this.scaledY);
-      }
-      transitionTo(x, y) {
-          this.x = x;
-          this.y = y;
-          this.transition();
-      }
-  }
-
   const svg = new GraphSVG(400, 600, 30);
   const scale = new Scale(0, 10, 10, 0, 20, 10, svg);
   scale.plotAxis();
   function AR1(Ytm1) {
-      return Ytm1 + Std_norm() * 2;
+      return Ytm1 + Std_norm();
   }
   // const Ar1Serie = new Serie(10, AR1, 10);
   // const ar1Plot = new Plot(svg, scale, Ar1Serie, true);
@@ -4058,19 +3972,10 @@
   // ar1Plot.showAllSequential(1000);
   const Ar2Serie = new Serie(10, AR1, 10);
   const ar2Plot = new Plot(svg, scale, Ar2Serie, true);
+  ar2Plot.showAllSequential(5000);
   //ar1Plot.showAll()
-  setTimeout(() => {
-      scale.setXMax(15);
-  }, 1000);
-  document.onkeydown = function (e) {
-      ar2Plot.showOneMore();
-  };
-  const l1 = new Line(1, 0, 1, 10, svg, scale);
-  l1.render();
-  const p = new Point(3, 3, svg, scale);
-  setTimeout(() => {
-      //    l1.transitionTo(5, 0, 5, 10);
-      p.transitionTo(10, 5);
-  }, 3000);
+  // setTimeout(() => {
+  //    scale.setXMax(15);
+  // }, 1000);
 
 })));

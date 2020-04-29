@@ -18,5 +18,4 @@ export default class GraphSVG {
             .attr("height", this.height);
     }
 
-
 }
