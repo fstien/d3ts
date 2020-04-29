@@ -28,7 +28,7 @@ export default class Plot implements ScaleObserver {
         this.count = this.serie.values.length;
         this.withCircles = withCircles;
 
-        this.scale.observersPlots.push(this)
+        this.scale.observers.push(this)
         
         this.line = d3
             .line()
@@ -108,7 +108,7 @@ export default class Plot implements ScaleObserver {
         }
     }
 
-    transitionScale() {
+    transition() {
         this.graphSvg.svg
             .selectAll("path.line#" + this.id)
             .transition()

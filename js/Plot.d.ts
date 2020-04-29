@@ -16,5 +16,5 @@ export default class Plot implements ScaleObserver {
     showAllSequential(duration: number): void;
     showOneMore(): void;
     render(): void;
-    transitionScale(): void;
+    transition(): void;
 }

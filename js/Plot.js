@@ -10,7 +10,7 @@ export default class Plot {
         this.serie = serie;
         this.count = this.serie.values.length;
         this.withCircles = withCircles;
-        this.scale.observersPlots.push(this);
+        this.scale.observers.push(this);
         this.line = d3
             .line()
             .x(function (v) { return scale.xScale(v.x); }.bind(this))
@@ -81,7 +81,7 @@ export default class Plot {
                 .attr("color", "black");
         }
     }
-    transitionScale() {
+    transition() {
         this.graphSvg.svg
             .selectAll("path.line#" + this.id)
             .transition()

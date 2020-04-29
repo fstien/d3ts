@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import defaultConfig from './TransitionConfig';
 class Scale {
     constructor(xMin, xMax, xTicks, yMin, yMax, yTicks, graph) {
-        this.observersPlots = [];
+        this.observers = [];
         this.xMin = xMin;
         this.xMax = xMax;
         this.xTicks = xTicks;
@@ -38,8 +38,8 @@ class Scale {
         this.updateObservers();
     }
     updateObservers() {
-        this.observersPlots.forEach(function (plot) {
-            plot.transitionScale();
+        this.observers.forEach(function (plot) {
+            plot.transition();
         });
     }
 }

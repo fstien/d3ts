@@ -1,1 +1,1 @@
-{"version":3,"file":"TransitionConfig.js","sourceRoot":"","sources":["../src/TransitionConfig.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,MAAM,IAAI,CAAC;AAOzB,MAAM,gBAAgB,GAAqB;IACvC,QAAQ,EAAE,IAAI;IACd,IAAI,EAAE,EAAE,CAAC,OAAO;CACnB,CAAA;AAED,eAAe,gBAAgB,CAAC"}
+{"version":3,"file":"TransitionConfig.js","sourceRoot":"","sources":["../src/TransitionConfig.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,MAAM,IAAI,CAAC;AAOzB,MAAM,gBAAgB,GAAqB;IACvC,QAAQ,EAAE,IAAI;IACd,IAAI,EAAE,EAAE,CAAC,cAAc;CAC1B,CAAA;AAED,eAAe,gBAAgB,CAAC"}

@@ -5,7 +5,7 @@ import defaultConfig from './TransitionConfig';
 
 
 interface ScaleObserver {
-    transitionScale(): void
+    transition(): void
 }
 
 class Scale {
@@ -28,7 +28,7 @@ class Scale {
     gX: any;
     gY: any;
 
-    observersPlots: Array<ScaleObserver> = [];
+    observers: Array<ScaleObserver> = [];
     
     constructor(xMin: number, xMax: number, xTicks: number,
             yMin: number, yMax: number, yTicks: number,
@@ -79,8 +79,8 @@ class Scale {
     }
 
     updateObservers() {
-        this.observersPlots.forEach(function(plot) {
-            plot.transitionScale()
+        this.observers.forEach(function(plot) {
+            plot.transition()
         })
     }
 }

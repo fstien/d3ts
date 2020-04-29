@@ -6,8 +6,8 @@ interface TransitionConfig {
 }
 
 const transitionConfig: TransitionConfig = {
-    duration: 2000,
-    ease: d3.easeSin
+    duration: 1000,
+    ease: d3.easeCubicInOut
 }
 
 export default transitionConfig;
