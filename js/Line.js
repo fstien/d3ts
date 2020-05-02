@@ -1,8 +1,9 @@
 import transitionConfig from './TransitionConfig';
-export default class Line {
-    constructor(x1, y1, x2, y2, svg, scale) {
+class Line {
+    constructor(x1, y1, x2, y2, style, svg, scale) {
         this.scale = scale;
         this.svg = svg;
+        this.style = style;
         this.id = "id" + (Math.floor(Math.random() * 1000000) + 1);
         this.x1 = x1;
         this.y1 = y1;
@@ -21,8 +22,10 @@ export default class Line {
             .attr("x2", this.scaledX2)
             .attr("y2", this.scaledY2)
             .attr("id", this.id)
-            .attr("visibility", "visible")
-            .attr("stroke", "black");
+            .attr("stroke", this.style.color)
+            .attr("stroke-dasharray", this.style.strokeDasharray)
+            .attr("stroke-width", this.style.width)
+            .attr("visibility", "visible");
     }
     transition() {
         this.scaledX1 = this.scale.xScale(this.x1);
@@ -53,4 +56,5 @@ export default class Line {
         this.transition();
     }
 }
+export { Line };
 //# sourceMappingURL=Line.js.map

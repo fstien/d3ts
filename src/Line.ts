@@ -1,8 +1,16 @@
+
 import { Scale, ScaleObserver } from "./Scale";
 import GraphSVG from './GraphSVG';
 import transitionConfig from './TransitionConfig';
 
-export default class Line implements ScaleObserver { 
+
+interface LineStyle {
+    color: string;
+    width: string;
+    strokeDasharray: string;
+}
+
+class Line implements ScaleObserver { 
     id: string;
 
     x1: number;
@@ -15,12 +23,15 @@ export default class Line implements ScaleObserver {
     scaledX2: number;
     scaledY2: number;
 
+    style: LineStyle;
+
     svg: GraphSVG;
     scale: Scale;
 
-    constructor(x1: number, y1: number, x2: number, y2: number, svg: GraphSVG, scale: Scale) {
+    constructor(x1: number, y1: number, x2: number, y2: number, style: LineStyle, svg: GraphSVG, scale: Scale) {
         this.scale = scale;
         this.svg = svg;
+        this.style = style;
 
         this.id = "id" + (Math.floor(Math.random()*1000000) + 1);
     
@@ -44,8 +55,10 @@ export default class Line implements ScaleObserver {
             .attr("x2", this.scaledX2)
             .attr("y2", this.scaledY2)
             .attr("id", this.id)
-            .attr("visibility", "visible")
-            .attr("stroke", "black");
+            .attr("stroke", this.style.color)
+            .attr("stroke-dasharray", this.style.strokeDasharray)
+            .attr("stroke-width", this.style.width)
+            .attr("visibility", "visible");
     }
     
     transition() {
@@ -81,4 +94,9 @@ export default class Line implements ScaleObserver {
         this.transition();
     }
 
+}
+
+export {
+    LineStyle,
+    Line
 }

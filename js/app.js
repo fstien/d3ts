@@ -3,7 +3,7 @@ import { Scale } from './Scale';
 import Std_norm from './Stats';
 import { Serie } from './Serie';
 import Plot from './Plot';
-import Line from './Line';
+import { Line } from './Line';
 import Point from './Point';
 const svg = new GraphSVG(400, 600, 30);
 const scale = new Scale(0, 10, 10, 0, 20, 10, svg);
@@ -25,11 +25,23 @@ setTimeout(() => {
 document.onkeydown = function (e) {
     ar2Plot.showOneMore();
 };
-const l1 = new Line(1, 0, 1, 10, svg, scale);
+// ar2Plot.showAll();
+const l1Style = {
+    color: "black",
+    width: "1",
+    strokeDasharray: "5 10"
+};
+const l1 = new Line(0.5, 0, 0.5, 10, l1Style, svg, scale);
 l1.render();
 const p = new Point(3, 3, svg, scale);
 setTimeout(() => {
-    //    l1.transitionTo(5, 0, 5, 10);
-    p.transitionTo(10, 5);
+    p.transitionTo(12, 6);
+    l1.transitionTo(2.5, 0, 2.5, 12);
 }, 3000);
+const vert = [];
+Ar2Serie.values.forEach(value => {
+    const line = new Line(value.x, 0, value.x, value.y, l1Style, svg, scale);
+    vert.push(line);
+    line.render();
+});
 //# sourceMappingURL=app.js.map

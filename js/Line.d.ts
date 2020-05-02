@@ -1,6 +1,11 @@
 import { Scale, ScaleObserver } from "./Scale";
 import GraphSVG from './GraphSVG';
-export default class Line implements ScaleObserver {
+interface LineStyle {
+    color: string;
+    width: string;
+    strokeDasharray: string;
+}
+declare class Line implements ScaleObserver {
     id: string;
     x1: number;
     y1: number;
@@ -10,11 +15,13 @@ export default class Line implements ScaleObserver {
     scaledY1: number;
     scaledX2: number;
     scaledY2: number;
+    style: LineStyle;
     svg: GraphSVG;
     scale: Scale;
-    constructor(x1: number, y1: number, x2: number, y2: number, svg: GraphSVG, scale: Scale);
+    constructor(x1: number, y1: number, x2: number, y2: number, style: LineStyle, svg: GraphSVG, scale: Scale);
     render(): void;
     transition(): void;
     hide(): void;
     transitionTo(x1: number, y1: number, x2: number, y2: number): void;
 }
+export { LineStyle, Line };

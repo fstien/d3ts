@@ -18,7 +18,6 @@ export default class Point {
         this.scale.observers.push(this);
     }
     transition() {
-        console.log("transition");
         this.scaledX = this.scale.xScale(this.x);
         this.scaledY = this.scale.yScale(this.y);
         this.svg.svg

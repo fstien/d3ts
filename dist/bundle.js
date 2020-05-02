@@ -3955,9 +3955,10 @@
   }
 
   class Line {
-      constructor(x1, y1, x2, y2, svg, scale) {
+      constructor(x1, y1, x2, y2, style, svg, scale) {
           this.scale = scale;
           this.svg = svg;
+          this.style = style;
           this.id = "id" + (Math.floor(Math.random() * 1000000) + 1);
           this.x1 = x1;
           this.y1 = y1;
@@ -3976,8 +3977,10 @@
               .attr("x2", this.scaledX2)
               .attr("y2", this.scaledY2)
               .attr("id", this.id)
-              .attr("visibility", "visible")
-              .attr("stroke", "black");
+              .attr("stroke", this.style.color)
+              .attr("stroke-dasharray", this.style.strokeDasharray)
+              .attr("stroke-width", this.style.width)
+              .attr("visibility", "visible");
       }
       transition() {
           this.scaledX1 = this.scale.xScale(this.x1);
@@ -4028,7 +4031,6 @@
           this.scale.observers.push(this);
       }
       transition() {
-          console.log("transition");
           this.scaledX = this.scale.xScale(this.x);
           this.scaledY = this.scale.yScale(this.y);
           this.svg.svg
@@ -4065,12 +4067,22 @@
   document.onkeydown = function (e) {
       ar2Plot.showOneMore();
   };
-  const l1 = new Line(1, 0, 1, 10, svg, scale);
+  // ar2Plot.showAll();
+  const l1Style = {
+      color: "black",
+      width: "1",
+      strokeDasharray: "5 10"
+  };
+  const l1 = new Line(0.5, 0, 0.5, 10, l1Style, svg, scale);
   l1.render();
   const p = new Point(3, 3, svg, scale);
   setTimeout(() => {
-      //    l1.transitionTo(5, 0, 5, 10);
-      p.transitionTo(10, 5);
+      p.transitionTo(12, 6);
+      l1.transitionTo(2.5, 0, 2.5, 12);
   }, 3000);
+  Ar2Serie.values.forEach(value => {
+      const line = new Line(value.x, 0, value.x, value.y, l1Style, svg, scale);
+      line.render();
+  });
 
 })));

@@ -40,8 +40,6 @@ export default class Point implements ScaleObserver {
 
 
     transition() {
-        console.log("transition");
-
         this.scaledX = this.scale.xScale(this.x);
         this.scaledY = this.scale.yScale(this.y);
 
