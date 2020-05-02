@@ -6,12 +6,11 @@ export default class Plot implements ScaleObserver {
     graphSvg: GraphSVG;
     scale: Scale;
     serie: Serie;
-    withCircles: Boolean;
     count: number;
     start: number;
     stop: number;
     line: any;
-    constructor(graphSvg: GraphSVG, scale: Scale, serie: Serie, withCircles?: Boolean);
+    constructor(graphSvg: GraphSVG, scale: Scale, serie: Serie);
     showAll(): void;
     showAllSequential(duration: number): void;
     showOneMore(): void;
