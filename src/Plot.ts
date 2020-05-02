@@ -12,7 +12,6 @@ export default class Plot implements ScaleObserver {
     graphSvg: GraphSVG;
     scale: Scale;
     serie: Serie;
-    withCircles: Boolean
 
     count: number;
     start: number = 0;
@@ -20,13 +19,12 @@ export default class Plot implements ScaleObserver {
 
     line: any;
 
-    constructor(graphSvg: GraphSVG, scale: Scale, serie: Serie, withCircles: Boolean = false) {
+    constructor(graphSvg: GraphSVG, scale: Scale, serie: Serie) {
         this.id = "id" + serie.id;
         this.graphSvg = graphSvg
         this.scale = scale;
         this.serie = serie;
         this.count = this.serie.values.length;
-        this.withCircles = withCircles;
 
         this.scale.observers.push(this)
         
@@ -45,24 +43,6 @@ export default class Plot implements ScaleObserver {
             .attr("id", this.id)
             .attr("fill", "none")
             .attr("stroke", "black");
-        
-        if (this.withCircles) {
-            this.graphSvg.svg
-                .append("g")
-                .attr("id", this.id)
-                .selectAll("circle")
-                .data(this.serie.values.slice(this.start, this.stop - 1))
-                .enter()
-                .append("circle")
-                .attr("cx", function(v: Value) {
-                    return this.scale.xScale(v.x);
-                }.bind(this))
-                .attr("cy", function(v: Value) {
-                    return this.scale.yScale(v.y);
-                }.bind(this)) 
-                .attr("r", 2)
-                .attr("color", "black"); 
-        }
     }
 
     showAll() {
@@ -89,23 +69,6 @@ export default class Plot implements ScaleObserver {
             .selectAll("path.line#" + this.id)
             .data([this.serie.values.slice(this.start, this.stop)])
             .attr("d", this.line);
-
-        if (this.withCircles) {
-            this.graphSvg.svg
-                .select("g#" + this.id)
-                .selectAll("circle") 
-                .data(this.serie.values.slice(this.start, this.stop))
-                .enter()
-                .append("circle")
-                .attr("cx", function(v: Value) {
-                    return this.scale.xScale(v.x);
-                }.bind(this))
-                .attr("cy", function(v: Value) {
-                    return this.scale.yScale(v.y);
-                }.bind(this)) 
-                .attr("r", 2)
-                .attr("color", "black"); 
-        }
     }
 
     transition() {
@@ -115,20 +78,5 @@ export default class Plot implements ScaleObserver {
             .ease(transitionConfig.ease)
             .duration(transitionConfig.duration)
             .attr("d", this.line);
-
-        if (this.withCircles) {
-            this.graphSvg.svg
-                .select("g#" + this.id)
-                .selectAll("circle") 
-                .transition()
-                .ease(transitionConfig.ease)
-                .duration(transitionConfig.duration)
-                .attr("cx", function(v: Value) {
-                    return this.scale.xScale(v.x);
-                }.bind(this))
-                .attr("cy", function(v: Value) {
-                    return this.scale.yScale(v.y);
-                }.bind(this));
-        }
     }
 }
