@@ -11,4 +11,3 @@ const transitionConfig: TransitionConfig = {
 }
 
 export default transitionConfig;
-

@@ -1,3 +1,4 @@
+
 import { Scale, ScaleObserver } from "./Scale";
 import GraphSVG from './GraphSVG';
 import transitionConfig from './TransitionConfig';
@@ -37,7 +38,6 @@ export default class Point implements ScaleObserver {
 
         this.scale.observers.push(this);
     }
-
 
     transition() {
         this.scaledX = this.scale.xScale(this.x);
