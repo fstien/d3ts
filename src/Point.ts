@@ -10,13 +10,15 @@ export default class Point implements ScaleObserver {
     x: number;
     y: number;
 
+    size: number;
+
     scaledX: number;
     scaledY: number;
 
     svg: GraphSVG;
     scale: Scale;
 
-    constructor(x: number, y: number, svg: GraphSVG, scale: Scale) {
+    constructor(x: number, y: number, size: number, svg: GraphSVG, scale: Scale) {
         this.scale = scale;
         this.svg = svg;
 
@@ -24,7 +26,8 @@ export default class Point implements ScaleObserver {
     
         this.x = x;
         this.y = y;
-        
+        this.size = size;
+
         this.scaledX = this.scale.xScale(this.x);
         this.scaledY = this.scale.yScale(this.y);
 
@@ -33,7 +36,7 @@ export default class Point implements ScaleObserver {
             .attr("id", this.id)
             .attr("cx", this.scaledX)
             .attr("cy", this.scaledY)
-            .attr("r", 2)
+            .attr("r", this.size)
             .attr("color", "black"); 
 
         this.scale.observers.push(this);

@@ -18,6 +18,9 @@ class SequentialPlot {
     lineStyle: LineStyle
     gridStyle: LineStyle
 
+    increaseStyle: LineStyle
+    decreaseStyle: LineStyle
+
     count: number
 
     n: number = 0
@@ -38,9 +41,21 @@ class SequentialPlot {
         }
 
         this.gridStyle = {
-            color: "black",
+            color: "grey",
             width: "1",
-            strokeDasharray: "5 10"
+            strokeDasharray: "6 3"
+        }
+
+        this.increaseStyle = {
+            color: "green",
+            width: "2",
+            strokeDasharray: "none"
+        }
+
+        this.decreaseStyle = {
+            color: "red",
+            width: "2",
+            strokeDasharray: "none"
         }
 
         this.count = this.serie.values.length
@@ -52,24 +67,40 @@ class SequentialPlot {
         const v1 = this.serie.values[this.n]
         const v2 = this.serie.values[this.n+1]
 
+        const increase: Boolean = v2.y > v1.y
+
         const line = new Line(v1.x, v1.y, v1.x, v1.y, this.lineStyle, this.graphSvg, this.scale)
         line.render()
 
-        const point = new Point(v1.x, v1.y, this.graphSvg, this.scale)
+        const point = new Point(v1.x, v1.y, 2, this.graphSvg, this.scale)
 
         const vert = new Line(v2.x, 0, v2.x, v2.y, this.gridStyle, this.graphSvg, this.scale)
         const hor = new Line(0, v2.y, v2.x, v2.y, this.gridStyle, this.graphSvg, this.scale)
 
+        const style = increase ? this.increaseStyle : this.decreaseStyle
+
+        const diff = new Line(v2.x, v1.y, v2.x, v1.y, style, this.graphSvg, this.scale)
+
         point.transitionTo(v2.x, v2.y)
         line.transitionTo(v1.x, v1.y, v2.x, v2.y)
 
-        setTimeout(() => {
+        setTimeout(function() {
             vert.render()
             hor.render()
-        }, transitionConfig.duration)
+            diff.render()
 
+            diff.transitionTo(v2.x, v1.y, v2.x, v2.y)
+
+            setTimeout(function() {
+                if (this.n - 2 < 0) return
+                this.vertGrid[this.n-2].hide()
+                this.horGrid[this.n-2].hide()
+            }.bind(this), transitionConfig.duration*2)
+        }.bind(this), transitionConfig.duration)
 
         
+        
+
         this.n++
         this.lines.push(line)
         this.points.push(point)
